@@ -184,7 +184,7 @@
     };
     var in_game = false
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'img/image_names.txt', false);
+    xhr.open('GET', 'image_names.txt', false);
     xhr.send(null);
     var urls = xhr.responseText.split('\n')
     $$("item").src = (urls[Math.floor(Math.random() * urls.length)])
