@@ -8,8 +8,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
-<meta name="viewport" content="user-scalable = no">
+    <meta name="viewport" content="user-scalable = no">
 </head>
+
 <style>
     * {
         font-family: Verdana, Arial, sans-serif;
@@ -125,6 +126,10 @@
 </style>
 
 <body style="background-color:white">
+    <div>
+        <div id="score" style="float:left">0</div>
+        <div id="time" style="float:right">1:00</div>
+    </div>
     <div style="width:960px;margin-left: auto;margin-right: auto;border: 1px solid black;">
         <h1 class="center" id="headline">NameIt!</h1>
         <div id="info">
@@ -170,13 +175,10 @@
                                               margin-right:auto; margin-bottom:10px; width:20%; background-color:blue; font-family: Great Vibes, cursive;" onclick="startButton(event)">Play!</button>
         </div>
     </div>
-    <div>
-        <div id="score" style="float:left">0</div>
-        <div id="userInput" style="font-size:30px; margin-left:auto; margin-right:auto; padding:0; width:80%; display:inline-block"></div>
-        <div id="time" style="float:right">1:00</div>
     </div>
+    <div id="userInput" style="font-size:30px; margin-left:auto; margin-right:auto; padding:0; width:100%; display:inline-block"></div>
     </div>
-    </div>
+
 </body>
 <script>
     var $$ = function(id) {
