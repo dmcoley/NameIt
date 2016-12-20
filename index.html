@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html style="height:100%">
 <meta charset="utf-8">
 
 <head>
@@ -8,130 +9,19 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="main.css">
     <meta name="viewport" content="user-scalable = no">
 </head>
 
-<style>
-    * {
-        font-family: Verdana, Arial, sans-serif;
-    }
-    
-    a:link {
-        color: #000;
-        text-decoration: none;
-    }
-    
-    a:visited {
-        color: #000;
-    }
-    
-    a:hover {
-        color: #33F;
-    }
-    
-    .button {
-        background: -webkit-linear-gradient(top, #008dfd 0, #0370ea 100%);
-        border: 1px solid #076bd2;
-        border-radius: 3px;
-        color: #fff;
-        display: none;
-        font-size: 13px;
-        font-weight: bold;
-        line-height: 1.3;
-        padding: 8px 25px;
-        text-align: center;
-        text-shadow: 1px 1px 1px #076bd2;
-        letter-spacing: normal;
-    }
-    
-    .center {
-        padding: 10px;
-        text-align: center;
-    }
-    
-    .final {
-        color: black;
-        padding-right: 3px;
-    }
-    
-    .interim {
-        color: gray;
-    }
-    
-    .info {
-        font-size: 14px;
-        text-align: center;
-        color: #777;
-        display: none;
-    }
-    
-    .right {
-        float: right;
-    }
-    
-    .sidebyside {
-        display: inline-block;
-        width: 45%;
-        min-height: 40px;
-        text-align: left;
-        vertical-align: top;
-    }
-    
-    #headline {
-        font-size: 75px;
-        font-weight: 300;
-        padding: 0px;
-        height: 130px;
-    }
-    
-    #info {
-        font-size: 20px;
-        text-align: center;
-        color: #777;
-        visibility: hidden;
-    }
-    
-    #start_button {
-        border: 0;
-        background-color: transparent;
-        padding: 0;
-    }
-    
-    #score,
-    #time {
-        font-size: 40px;
-    }
-    
-    #score {
-        margin-left: 15px;
-    }
-    
-    #time {
-        margin-right: 15px;
-    }
-    
-    h1,
-    #time,
-    #score,
-    #userInput {
-        color: blue;
-        font-family: "Great Vibes", cursive;
-        font-size: 80px;
-        line-height: 160px;
-        font-weight: normal;
-        margin-bottom: 0px;
-        text-align: center;
-        text-shadow: 0 1px 1px #fff;
-    }
-</style>
-
-<body style="background-color:white">
+<body>
+    <div id="main">
     <div>
         <div id="score" style="float:left">0</div>
         <div id="time" style="float:right">1:00</div>
     </div>
     <div style="width:960px;margin-left: auto;margin-right: auto;border: 1px solid black;">
-        <h1 class="center" id="headline">NameIt!</h1>
+        <h1 class="center" id="headline" style="margin-bottom:0px">NameIt!</h1>
         <div id="info">
             <p id="info_start"></p>
             <p id="info_speak_now">If you get stuck, open your Chrome console (Command + Option + J)!</p>
@@ -146,10 +36,6 @@
             <p id="info_denied">Permission to use microphone was denied.</p>
             <p id="info_blocked">Permission to use microphone is blocked. To change, go to chrome://settings/contentExceptions#media-stream</p>
             <p id="info_upgrade">NameIt! is not supported by this browser. Upgrade to <a href="//www.google.com/chrome">Chrome</a> version 25 or later.</p>
-        </div>
-        <div class="right">
-            <button id="start_button">
-    <img id="start_img" src="mic.gif" alt="Start"></button>
         </div>
         <div class="center">
             <div class="items" style="margin-bottom: 10px;">
@@ -172,181 +58,16 @@
         </div>
         <div style="text-align:center">
             <button type="button" class="btn btn-primary btn-lg btn-block" id="play" style="margin-left:auto;
-                                              margin-right:auto; margin-bottom:10px; width:20%; background-color:blue; font-family: Great Vibes, cursive;" onclick="startButton(event)">Play!</button>
+                                              margin-right:auto; margin-bottom:10px; width:20%;" onclick="startButton(event)">Play!</button>
         </div>
     </div>
+    <div class="right">
+            <button id="start_button">
+    <img id="start_img" src="mic.gif" alt="Start"></button>
     </div>
-    <div id="userInput" style="font-size:30px; margin-left:auto; margin-right:auto; padding:0; width:100%; display:inline-block"></div>
+    <div id="userInput" style="font-size:30px; margin-left:auto; margin-right:auto; padding:0; width:99%; display:inline-block"></div>
     </div>
-
+</div>
 </body>
-<script>
-    var $$ = function(id) {
-        return document.getElementById(id);
-    };
-    var in_game = false
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'image_names.txt', false);
-    xhr.send(null);
-    var urls = xhr.responseText.split('\n')
-    $$("item").src = (urls[Math.floor(Math.random() * urls.length)])
-    showInfo('info_start');
-    var create_email = false;
-    var final_transcript = '';
-    var recognizing = false;
-    var ignore_onend;
-    var start_timestamp;
-    if (!('webkitSpeechRecognition' in window)) {
-        upgrade();
-    } else {
-        start_button.style.display = 'inline-block';
-        var recognition = new webkitSpeechRecognition();
-        recognition.continuous = false;
-        recognition.interimResults = false;
-
-        recognition.onstart = function() {
-            recognizing = true;
-            showInfo('info_speak_now');
-            start_img.src = 'mic-animate.gif';
-        };
-
-        recognition.onerror = function(event) {
-            if (event.error == 'no-speech') {
-                start_img.src = 'mic.gif';
-                showInfo('info_no_speech');
-                ignore_onend = true;
-            }
-            if (event.error == 'audio-capture') {
-                start_img.src = 'mic.gif';
-                showInfo('info_no_microphone');
-                ignore_onend = true;
-            }
-            if (event.error == 'not-allowed') {
-                if (event.timeStamp - start_timestamp < 100) {
-                    showInfo('info_blocked');
-                } else {
-                    showInfo('info_denied');
-                }
-                ignore_onend = true;
-            }
-        };
-
-        recognition.onend = function() {
-            if (ignore_onend) {
-                return;
-            }
-            start_img.src = 'mic.gif';
-            if (!final_transcript) {
-                showInfo('info_start');
-                return;
-            }
-            recognition.start()
-        };
-
-        recognition.onresult = function(event) {
-            var prev = ""
-            for (var i = event.resultIndex; i < event.results.length; ++i) {
-                if (event.results[i].isFinal) {
-                    final_transcript += event.results[i][0].transcript;
-                    prev = event.results[i][0].transcript;
-                }
-            }
-            if (final_transcript.length > 0) {
-                var voiceInput = final_transcript.toLowerCase().replace("-", " ")
-                var element = $$("item").src
-                var end = element.lastIndexOf("_")
-                var start = element.lastIndexOf("/") + 1
-                element = element.substring(start, end).toLowerCase()
-                element = element.replace("_", " ")
-                console.log("Hint: correct answer is " + element)
-                $$("userInput").textContent = "I think you said... " + prev
-                if (checkEqual(voiceInput, element, prev)) {
-                    $$("item").src = urls[Math.floor(Math.random() * urls.length)]
-                    $$("score").textContent = parseInt($$("score").textContent) + 1;
-                }
-            }
-        };
-    }
-
-    function checkEqual(s1, s2, s3) {
-        return s2.includes(s3) || s1.includes(s2) || s1.includes(s2 + "s") || s1.includes(s2 + "es") ||
-            s1.includes(s2.substring(0, s2.length - 1) || s1.includes(s2.substring(0, s2.length - 2)))
-    }
-
-    function upgrade() {
-        start_button.style.visibility = 'hidden';
-        showInfo('info_upgrade');
-    }
-
-    function startButton(event) {
-        if (in_game) {
-            $$("item").src = urls[Math.floor(Math.random() * urls.length)]
-            return;
-        }
-        if (recognizing) {
-            recognition.stop();
-            return;
-        }
-        $$("play").textContent = "Skip!"
-        $("#myModal").modal("hide");
-        final_transcript = '';
-        recognition.start();
-        ignore_onend = false;
-        start_img.src = 'mic-slash.gif';
-        showInfo('info_allow');
-        showButtons('none');
-        start_timestamp = event.timeStamp;
-        startTimer(60, time)
-        in_game = true
-    }
-
-    function showInfo(s) {
-        if (s) {
-            for (var child = info.firstChild; child; child = child.nextSibling) {
-                if (child.style) {
-                    child.style.display = child.id == s ? 'inline' : 'none';
-                }
-            }
-            info.style.visibility = 'visible';
-        } else {
-            info.style.visibility = 'hidden';
-        }
-    }
-    var current_style;
-
-    function showButtons(style) {
-        if (style == current_style) {
-            return;
-        }
-        current_style = style;
-    }
-
-    function startTimer(duration, display) {
-        var timer = duration,
-            minutes, seconds;
-        var interval = setInterval(function() {
-            minutes = parseInt(timer / 60, 10);
-            seconds = parseInt(timer % 60, 10);
-            seconds = seconds < 10 ? "0" + seconds : seconds;
-            display.textContent = minutes + ":" + seconds;
-            if (--timer < 0) {
-                timer = duration;
-            }
-            if (minutes == 0 && seconds == 0) {
-                clearInterval(interval);
-                start_img.src = 'mic.gif'
-                $("#myModal").modal("show");
-                display.textContent = "1:00"
-                var resultScore = $$("score").textContent
-                $$("score").textContent = 0
-                $$("score").style.color = "blue"
-                $$("points").textContent = resultScore
-                $$("play").textContent = "Play!"
-                in_game = false
-                recognizing = false
-                var highscore = $$("highscore").textContent
-                $$("highscore").textContent = Math.max(highscore, resultScore)
-            }
-        }, 1000);
-    }
-</script>
+<script src="interactions.js"></script>
+</html>
